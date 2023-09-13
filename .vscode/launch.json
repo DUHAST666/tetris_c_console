@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/Мои документы/coding/tetris_c_console",
-      "program": "d:/Мои документы/coding/tetris_c_console/build/Debug/outDebug",
+      "cwd": "c:/Users/saganovich/Documents/coding/tetris_c_console",
+      "program": "c:/Users/saganovich/Documents/coding/tetris_c_console/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
