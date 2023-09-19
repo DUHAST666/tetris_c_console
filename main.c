@@ -2,27 +2,22 @@
 
 int main()
 {
-    char Map_static[N_LINE][N_COL];
-    char Map_dynamic[N_LINE][N_COL];
 
-    init_map_static(Map_static);
+    init_map_static();
    
     
     while(1){
-        spawn_fig(Map_static, Map_dynamic);
-        print_console(Map_dynamic);
         check_pressed_key();
         run_action();
         fall_fig();
         check_line_complite();
-        getch(); 
     }
 
 
     return 0;
 }
 
-void init_map_static(char (*Map_static)[N_COL])
+void init_map_static()
 {
     char i, n;
 
@@ -72,7 +67,7 @@ void run_action()
 {
     if (pressed_key != NONE) {
         switch(pressed_key){
-            case LEFT:  move_left_fig();
+            case LEFT:  spawn_fig();//move_left_fig();
                         break;
             case RIGHT: move_right_fig();
                         break;
@@ -82,10 +77,11 @@ void run_action()
                         break;
         }
         pressed_key = NONE;
+        print_console();
     }  
 }
 
-void array_update(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL], char (*figure)[SZ_FIG], char posX, char posY, char posRot)
+void array_update(char posX, char posY)
 {
     char n_fig = 0;
     char i_fig = 0;
@@ -99,7 +95,10 @@ void array_update(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL], char (*
             if (n >= posX && n < posX + SZ_FIG &&
                 i >= posY && i < posY + SZ_FIG) 
             {
-                Map_dynamic[i][n] = figure[i_fig][n_fig];
+                if (PosRot == 0 || PosRot == 2)
+                    Map_dynamic[i][n] = figure[i_fig][n_fig];
+                else if (PosRot == 1 || PosRot == 3)
+                    Map_dynamic[i][n] = figure[n_fig][i_fig];
                 n_fig++;
             }
             //printf("%d", Map_dynamic[i][n]);
@@ -109,9 +108,9 @@ void array_update(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL], char (*
     }
 }
 
-void spawn_fig(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL])
+void spawn_fig()
 {
-    char (*figure)[SZ_FIG];
+    PosRot = 0;
 
     switch(random_num_0to6()){
         case 0: figure = Fig_sqr;
@@ -129,7 +128,7 @@ void spawn_fig(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL])
         case 6: figure = Fig_Z2;
                 break;
     }
-        array_update(Map_static, Map_dynamic, figure, FIG_SPWN_POS_X0, 0, 0);
+        array_update(FIG_SPWN_POS_X0, 0);
 } 
 
 void speed_fall_fig()
@@ -149,7 +148,9 @@ void move_right_fig()
 
 void rotation_fig()
 {
-
+    if (PosRot < 3) PosRot++;
+    else PosRot = 0;
+    array_update(FIG_SPWN_POS_X0, 0);
 }
 
 void fall_fig()
@@ -162,8 +163,9 @@ void check_line_complite()
 
 }
 
-void print_console(char (*Map_dynamic)[N_COL])
+void print_console()
 {
+    system("cls");
     for (char i = 0; i < N_LINE; i++) {
         printf("\n");
         for (char n = 0; n < N_COL; n++){

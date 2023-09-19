@@ -61,17 +61,21 @@ char Fig_Z2[SZ_FIG][SZ_FIG] = {{1,1,0,0},
 					 
 char Map_static_part1[N_COL] = {0,0,1,0,0,0,0,0,0,0,0,0,0,1,0};
 char Map_static_part2[N_COL] = {0,0,1,1,1,1,1,1,1,1,1,1,1,1,0};
+char PosRot = 0;
+char (*figure)[SZ_FIG];
+char Map_static[N_LINE][N_COL];
+char Map_dynamic[N_LINE][N_COL];
 
-void init_map_static(char (*Map_static)[N_COL]);
+void init_map_static();
 char random_num_0to6();
-void spawn_fig(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL]);
+void spawn_fig();
 void speed_fall_fig();
 void move_left_fig();
 void move_right_fig();
 void rotation_fig();
 void check_pressed_key();
 void run_action();
-void print_console(char (*Map_dynamic)[N_COL]);
+void print_console();
 void fall_fig();
 void check_line_complite();
-void array_update(char (*Map_static)[N_COL], char (*Map_dynamic)[N_COL], char (*figure)[SZ_FIG], char posX, char posY, char posRot);
+void array_update(char posX, char posY);
