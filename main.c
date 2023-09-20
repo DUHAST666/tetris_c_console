@@ -6,10 +6,12 @@ int main()
     spawn_fig();
     print_console();
     while(1){
-        check_pressed_key();
+        /* check_pressed_key();
         run_action();
         fall_fig();
-        check_line_complite();
+        check_line_complite(); */
+        rotation_fig();
+        getch();
     }
 
 
@@ -147,10 +149,39 @@ void move_right_fig()
     posX++;
     array_update();
 }
+
 void rotation_fig()
 {
+    char figure_temp[SZ_FIG][SZ_FIG];
+    
     if (posRot < 3) posRot++;
     else posRot = 0;
+    char count_rot = posRot;
+
+    while(count_rot != 0){
+        count_rot--;
+        system("cls");
+        for (char i = 0; i < SZ_FIG; i++)
+        { 
+            for (char n = 0; n < SZ_FIG; n++)
+            {
+                figure_temp[i][n] = figure[n][SZ_FIG-1-i];
+            }
+        }
+
+        for (char i = 0; i < SZ_FIG; i++)
+        { 
+            printf("\n");
+            for (char n = 0; n < SZ_FIG; n++)
+            {
+                figure[i][n] = figure_temp[i][n];
+                printf("%d", figure[i][n]);
+            }
+        }
+        printf("\n");
+    }
+    
+
     array_update();
 }
 
