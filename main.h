@@ -24,30 +24,30 @@ typedef enum KEY {
 
 type_pressed_key pressed_key = NONE;
 
-char Fig_sqr[SZ_FIG][SZ_FIG]= {{0,1,1,0},
+char Fig_sqr[SZ_FIG][SZ_FIG]= {{0,0,0,0},
                                {0,1,1,0},
-                               {0,0,0,0},
+                               {0,1,1,0},
                                {0,0,0,0}};
                      
-char Fig_L1[SZ_FIG][SZ_FIG] = {{0,1,1,0},
+char Fig_L1[SZ_FIG][SZ_FIG] = {{1,1,0,0},
+                               {1,0,0,0},
+                               {1,0,0,0},
+                               {0,0,0,0}};
+					 
+char Fig_L2[SZ_FIG][SZ_FIG] = {{1,1,0,0},
                                {0,1,0,0},
                                {0,1,0,0},
                                {0,0,0,0}};
 					 
-char Fig_L2[SZ_FIG][SZ_FIG] = {{0,1,1,0},
-                               {0,0,1,0},
-                               {0,0,1,0},
-                               {0,0,0,0}};
-					 
-char Fig_T[SZ_FIG][SZ_FIG]  = {{0,1,1,1},
-                               {0,0,1,0},
+char Fig_T[SZ_FIG][SZ_FIG]  = {{1,1,1,0},
+                               {0,1,0,0},
                                {0,0,0,0},
                                {0,0,0,0}};
 					 
-char Fig_I[SZ_FIG][SZ_FIG]  = {{0,0,1,0},
-                               {0,0,1,0},
-                               {0,0,1,0},
-                               {0,0,1,0}};
+char Fig_I[SZ_FIG][SZ_FIG]  = {{0,1,0,0},
+                               {0,1,0,0},
+                               {0,1,0,0},
+                               {0,1,0,0}};
 					 
 char Fig_Z1[SZ_FIG][SZ_FIG] = {{0,1,1,0},
                                {1,1,0,0},
@@ -61,10 +61,12 @@ char Fig_Z2[SZ_FIG][SZ_FIG] = {{1,1,0,0},
 					 
 char Map_static_part1[N_COL] = {0,0,1,0,0,0,0,0,0,0,0,0,0,1,0};
 char Map_static_part2[N_COL] = {0,0,1,1,1,1,1,1,1,1,1,1,1,1,0};
-char PosRot = 0;
-char (*figure)[SZ_FIG];
-char Map_static[N_LINE][N_COL];
-char Map_dynamic[N_LINE][N_COL];
+char posRot = 0;                    // позиция вращения фигуры
+char posX;                          // начальная позиция фигуры по оси X
+char posY;                          // начальная позиция фигуры по оси Y
+char (*figure)[SZ_FIG];             // указатель на двумерный массив текущей фигуры
+char Map_static[N_LINE][N_COL];     // карта с неподвижными объектами
+char Map_dynamic[N_LINE][N_COL];    // карта для вывода движущейся фигуры
 
 void init_map_static();
 char random_num_0to6();
@@ -78,4 +80,4 @@ void run_action();
 void print_console();
 void fall_fig();
 void check_line_complite();
-void array_update(char posX, char posY);
+void array_update();

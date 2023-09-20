@@ -2,10 +2,9 @@
 
 int main()
 {
-
     init_map_static();
-   
-    
+    spawn_fig();
+    print_console();
     while(1){
         check_pressed_key();
         run_action();
@@ -81,7 +80,7 @@ void run_action()
     }  
 }
 
-void array_update(char posX, char posY)
+void array_update()
 {
     char n_fig = 0;
     char i_fig = 0;
@@ -95,9 +94,9 @@ void array_update(char posX, char posY)
             if (n >= posX && n < posX + SZ_FIG &&
                 i >= posY && i < posY + SZ_FIG) 
             {
-                if (PosRot == 0 || PosRot == 2)
+                if (posRot == 0)
                     Map_dynamic[i][n] = figure[i_fig][n_fig];
-                else if (PosRot == 1 || PosRot == 3)
+                else if (posRot == 1)
                     Map_dynamic[i][n] = figure[n_fig][i_fig];
                 n_fig++;
             }
@@ -110,7 +109,8 @@ void array_update(char posX, char posY)
 
 void spawn_fig()
 {
-    PosRot = 0;
+    posRot = 0;
+    posX = FIG_SPWN_POS_X0;
 
     switch(random_num_0to6()){
         case 0: figure = Fig_sqr;
@@ -128,7 +128,7 @@ void spawn_fig()
         case 6: figure = Fig_Z2;
                 break;
     }
-        array_update(FIG_SPWN_POS_X0, 0);
+        array_update();
 } 
 
 void speed_fall_fig()
@@ -138,19 +138,20 @@ void speed_fall_fig()
 
 void move_left_fig()
 {
-
+    posX--;
+    array_update();
 }
 
 void move_right_fig()
 {
-
+    posX++;
+    array_update();
 }
-
 void rotation_fig()
 {
-    if (PosRot < 3) PosRot++;
-    else PosRot = 0;
-    array_update(FIG_SPWN_POS_X0, 0);
+    if (posRot < 3) posRot++;
+    else posRot = 0;
+    array_update();
 }
 
 void fall_fig()
