@@ -10,7 +10,7 @@ int main()
         run_action();
         fall_fig();
         check_line_complite(); */
-        rotation_fig();
+        next_posRot_fig();
         getch();
     }
 
@@ -33,11 +33,11 @@ void init_map_static()
     }
 }
  
-char random_num_0to6()
+char random_num(char max_val)
 {
     char num;
     srand((unsigned int) time(NULL));          // #include <stdlib.h> and <time.h>
-    num = (char) rand() % 7;
+    num = (char) rand() % max_val+1;
     if (num < 0)
         num *= -1;
     return num;
@@ -74,7 +74,7 @@ void run_action()
                         break;
             case DOWN:  speed_fall_fig();
                         break;
-            case SPACE: rotation_fig();
+            case SPACE: next_posRot_fig();
                         break;
         }
         pressed_key = NONE;
@@ -111,10 +111,10 @@ void array_update()
 
 void spawn_fig()
 {
-    posRot = 0;
+    char posRot = random_num(3);
     posX = FIG_SPWN_POS_X0;
 
-    switch(random_num_0to6()){
+    switch(random_num(6)){
         case 0: figure = Fig_sqr;
                 break;
         case 1: figure = Fig_L1;
@@ -130,7 +130,8 @@ void spawn_fig()
         case 6: figure = Fig_Z2;
                 break;
     }
-        array_update();
+    rotation_fig(posRot);
+    array_update();
 } 
 
 void speed_fall_fig()
@@ -150,17 +151,15 @@ void move_right_fig()
     array_update();
 }
 
-void rotation_fig()
+void rotation_fig(char countRot)
 {
     char figure_temp[SZ_FIG][SZ_FIG];
     
-    if (posRot < 3) posRot++;
-    else posRot = 0;
-    char count_rot = posRot;
-
-    while(count_rot != 0){
-        count_rot--;
+    // вращаем count_rot раз 
+    while(countRot != 0){
+        countRot--;
         system("cls");
+        // заполняем временый массив перевернутыми данными
         for (char i = 0; i < SZ_FIG; i++)
         { 
             for (char n = 0; n < SZ_FIG; n++)
@@ -168,7 +167,7 @@ void rotation_fig()
                 figure_temp[i][n] = figure[n][SZ_FIG-1-i];
             }
         }
-
+        // переносим из временного массива в текущий
         for (char i = 0; i < SZ_FIG; i++)
         { 
             printf("\n");
@@ -180,8 +179,14 @@ void rotation_fig()
         }
         printf("\n");
     }
-    
 
+}
+
+void next_posRot_fig()
+{
+    if (posRot < 3) posRot++;
+    else posRot = 0;
+    rotation_fig(posRot);
     array_update();
 }
 

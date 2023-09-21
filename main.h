@@ -69,12 +69,13 @@ char Map_static[N_LINE][N_COL];     // карта с неподвижными о
 char Map_dynamic[N_LINE][N_COL];    // карта для вывода движущейся фигуры
 
 void init_map_static();
-char random_num_0to6();
+char random_num(char max_val);
 void spawn_fig();
 void speed_fall_fig();
 void move_left_fig();
 void move_right_fig();
-void rotation_fig();
+void next_posRot_fig();
+void rotation_fig(char countRot);
 void check_pressed_key();
 void run_action();
 void print_console();
