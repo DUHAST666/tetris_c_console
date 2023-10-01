@@ -76,6 +76,8 @@ void move_left_fig();
 void move_right_fig();
 void next_posRot_fig();
 void rotation_fig(char countRot);
+void write_temp_in_figure(char (*figure_temp)[SZ_FIG]);
+void align_fig();
 void check_pressed_key();
 void run_action();
 void print_console();

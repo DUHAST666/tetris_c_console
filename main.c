@@ -10,7 +10,8 @@ int main()
         run_action();
         fall_fig();
         check_line_complite(); */
-        next_posRot_fig();
+        spawn_fig();
+    print_console();
         getch();
     }
 
@@ -130,6 +131,7 @@ void spawn_fig()
         case 6: figure = Fig_Z2;
                 break;
     }
+
     rotation_fig(posRot);
     array_update();
 } 
@@ -167,19 +169,73 @@ void rotation_fig(char countRot)
                 figure_temp[i][n] = figure[n][SZ_FIG-1-i];
             }
         }
-        // переносим из временного массива в текущий
-        for (char i = 0; i < SZ_FIG; i++)
-        { 
-            printf("\n");
-            for (char n = 0; n < SZ_FIG; n++)
-            {
-                figure[i][n] = figure_temp[i][n];
-                printf("%d", figure[i][n]);
-            }
-        }
-        printf("\n");
+        write_temp_in_figure(figure_temp);
     }
+    // выравнивание строк и столбцов по левому и верхнему краю
+   align_fig();
+}
 
+void write_temp_in_figure(char (*figure_temp)[SZ_FIG])
+{
+    // переносим из временного массива в текущий
+    for (char i = 0; i < SZ_FIG; i++)
+    { 
+        //printf("\n");
+        for (char n = 0; n < SZ_FIG; n++)
+        {
+            figure[i][n] = figure_temp[i][n];
+            //printf("%d", figure[i][n]);
+        }
+    }
+    //printf("\n");
+    
+}
+
+void align_fig()
+{
+    char figure_temp[SZ_FIG][SZ_FIG];
+    char flg_fill = 0;
+    char offset = 0;
+    char val_offset = 0;
+    // смещение в 2 итерации (строки потом колонки)
+    for (char cnt = 0; cnt < 2; cnt++) {
+        // проверка на наличие части фигуры в строке или столбце
+        flg_fill = 0;
+        offset = 0;
+        do {
+            for (char n = 0; n < SZ_FIG; n++) {
+                if ( cnt == 0 && figure[offset][n] != 0 || 
+                     cnt == 1 && figure[n][offset] != 0) 
+                {
+                    flg_fill = 1;
+                    break;
+                }
+            }  
+            if (flg_fill == 0)
+                offset++;
+        } while (flg_fill == 0);
+        //printf("%d ", offset);
+        // заполнение временного массива смещенными строками или столбцами
+        if (offset != 0){
+            for (char i = 0; i < SZ_FIG; i++) {
+                for (char n = 0; n < SZ_FIG; n++) {
+                    if ( cnt == 0 ) {
+                        val_offset = i + offset;
+                        if (val_offset > SZ_FIG - 1)
+                            figure_temp[i][n] = 0;
+                        else figure_temp[i][n] = figure[val_offset][n];
+                    }
+                    else {
+                        val_offset = n + offset;
+                        if (val_offset > SZ_FIG - 1)
+                            figure_temp[i][n] = 0;
+                        else figure_temp[i][n] = figure[i][val_offset];
+                    }
+                }
+            }
+            write_temp_in_figure(figure_temp);
+        }
+    } 
 }
 
 void next_posRot_fig()
