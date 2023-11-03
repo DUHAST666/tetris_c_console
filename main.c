@@ -6,13 +6,13 @@ int main()
     spawn_fig();
     print_console();
     while(1){
-        /* check_pressed_key();
+        check_pressed_key();
         run_action();
         fall_fig();
-        check_line_complite(); */
-        spawn_fig();
-    print_console();
-        getch();
+        check_line_complite(); 
+      /*   
+        print_console();
+        getch(); */
     }
 
 
@@ -69,7 +69,7 @@ void run_action()
 {
     if (pressed_key != NONE) {
         switch(pressed_key){
-            case LEFT:  spawn_fig();//move_left_fig();
+            case LEFT:  move_left_fig();
                         break;
             case RIGHT: move_right_fig();
                         break;
@@ -83,7 +83,13 @@ void run_action()
     }  
 }
 
-void array_update()
+/* void write_line(char *string)
+{
+    printf("\n%s\n", string);
+    getch();
+}
+ */
+char *array_update()
 {
     char n_fig = 0;
     char i_fig = 0;
@@ -91,28 +97,38 @@ void array_update()
     for (char i = 0; i < N_LINE; i++) {
        // printf("\n");
         n_fig = 0;
-
         for (char n = 0; n < N_COL; n++){
             Map_dynamic[i][n] = Map_static[i][n];
             if (n >= posX && n < posX + SZ_FIG &&
                 i >= posY && i < posY + SZ_FIG) 
             {
-                if (posRot == 0)
+                // если фигура пересеклась с границей, то возвращаем ошибку 
+                if (Map_dynamic[i][n] == 1 && figure[i_fig][n_fig] == 1){
+                    if (n > N_COL/2){
+                        return ERR_MSG_R_WALL;
+                    }
+                    else if (n < N_COL/2){
+                        return ERR_MSG_L_WALL;
+                    }
+                }
+                else {
                     Map_dynamic[i][n] = figure[i_fig][n_fig];
-                else if (posRot == 1)
-                    Map_dynamic[i][n] = figure[n_fig][i_fig];
-                n_fig++;
+                    n_fig++;
+                }
             }
+            if (Map_dynamic[i][n] != 1)
+                Map_dynamic[i][n] = Map_static[i][n];
             //printf("%d", Map_dynamic[i][n]);
         } 
         if (i >= posY && i < posY + SZ_FIG)
             i_fig++;
     }
+    return ERR_MSG_OK;
 }
 
 void spawn_fig()
 {
-    char posRot = random_num(3);
+    char countRot = random_num(3);
     posX = FIG_SPWN_POS_X0;
 
     switch(random_num(6)){
@@ -132,7 +148,7 @@ void spawn_fig()
                 break;
     }
 
-    rotation_fig(posRot);
+    rotation_fig(countRot);
     array_update();
 } 
 
@@ -143,14 +159,22 @@ void speed_fall_fig()
 
 void move_left_fig()
 {
+    char *err;
+
     posX--;
-    array_update();
+    err = array_update();
+    if (strcmp(err, ERR_MSG_L_WALL) == 0)
+        move_right_fig();
 }
 
 void move_right_fig()
 {
+    char *err;
     posX++;
-    array_update();
+    err = array_update();
+    if (strcmp(err, ERR_MSG_R_WALL) == 0){
+        move_left_fig();
+    }
 }
 
 void rotation_fig(char countRot)
@@ -240,10 +264,16 @@ void align_fig()
 
 void next_posRot_fig()
 {
-    if (posRot < 3) posRot++;
-    else posRot = 0;
-    rotation_fig(posRot);
-    array_update();
+    char *err;
+
+    rotation_fig(1);
+    do {
+        err = array_update();
+        if (strcmp(err, ERR_MSG_L_WALL) == 0)
+            move_right_fig();
+        else if (strcmp(err, ERR_MSG_R_WALL) == 0)
+            move_left_fig();
+    } while (strcmp(err, ERR_MSG_OK) != 0);
 }
 
 void fall_fig()

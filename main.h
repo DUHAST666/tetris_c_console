@@ -3,6 +3,7 @@
 #include <time.h>
 #include <conio.h>
 #include <windows.h>
+#include <string.h>
 
 #define N_LINE 21
 #define N_COL 15
@@ -13,6 +14,10 @@
 #define KEY_LEFT 75
 #define KEY_SPACE 32
 #define KEY_DOWN 80
+#define ERR_MSG_L_WALL "L_WALL"
+#define ERR_MSG_R_WALL "R_WALL"
+#define ERR_MSG_OK "OK"
+#define LEN_STR 7
 
 typedef enum KEY {
     NONE,
@@ -61,7 +66,6 @@ char Fig_Z2[SZ_FIG][SZ_FIG] = {{1,1,0,0},
 					 
 char Map_static_part1[N_COL] = {0,0,1,0,0,0,0,0,0,0,0,0,0,1,0};
 char Map_static_part2[N_COL] = {0,0,1,1,1,1,1,1,1,1,1,1,1,1,0};
-char posRot = 0;                    // позиция вращения фигуры
 char posX;                          // начальная позиция фигуры по оси X
 char posY;                          // начальная позиция фигуры по оси Y
 char (*figure)[SZ_FIG];             // указатель на двумерный массив текущей фигуры
@@ -83,4 +87,4 @@ void run_action();
 void print_console();
 void fall_fig();
 void check_line_complite();
-void array_update();
+char *array_update();
