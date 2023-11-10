@@ -1,7 +1,7 @@
 #include "main.h"
 
 int main()
-{
+{   
     init_map_static();
     spawn_fig();
     print_console();
@@ -89,7 +89,7 @@ void run_action()
     getch();
 }
  */
-char *array_update()
+void array_update()
 {
     char n_fig = 0;
     char i_fig = 0;
@@ -105,10 +105,12 @@ char *array_update()
                 // если фигура пересеклась с границей, то возвращаем ошибку 
                 if (Map_dynamic[i][n] == 1 && figure[i_fig][n_fig] == 1){
                     if (n > N_COL/2){
-                        return ERR_MSG_R_WALL;
+                        err_msg = R_WALL;
+                        return;
                     }
                     else if (n < N_COL/2){
-                        return ERR_MSG_L_WALL;
+                        err_msg = L_WALL;
+                        return;
                     }
                 }
                 else {
@@ -123,7 +125,7 @@ char *array_update()
         if (i >= posY && i < posY + SZ_FIG)
             i_fig++;
     }
-    return ERR_MSG_OK;
+    err_msg = OK;
 }
 
 void spawn_fig()
@@ -159,22 +161,18 @@ void speed_fall_fig()
 
 void move_left_fig()
 {
-    char *err;
-
     posX--;
-    err = array_update();
-    if (strcmp(err, ERR_MSG_L_WALL) == 0)
+    array_update();
+    if (err_msg == L_WALL)
         move_right_fig();
 }
 
 void move_right_fig()
 {
-    char *err;
     posX++;
-    err = array_update();
-    if (strcmp(err, ERR_MSG_R_WALL) == 0){
+    array_update();
+    if (err_msg == R_WALL)
         move_left_fig();
-    }
 }
 
 void rotation_fig(char countRot)
@@ -184,7 +182,6 @@ void rotation_fig(char countRot)
     // вращаем count_rot раз 
     while(countRot != 0){
         countRot--;
-        system("cls");
         // заполняем временый массив перевернутыми данными
         for (char i = 0; i < SZ_FIG; i++)
         { 
@@ -264,16 +261,14 @@ void align_fig()
 
 void next_posRot_fig()
 {
-    char *err;
-
     rotation_fig(1);
     do {
-        err = array_update();
-        if (strcmp(err, ERR_MSG_L_WALL) == 0)
+        array_update();
+        if (err_msg == L_WALL)
             move_right_fig();
-        else if (strcmp(err, ERR_MSG_R_WALL) == 0)
+        else if (err_msg == R_WALL)
             move_left_fig();
-    } while (strcmp(err, ERR_MSG_OK) != 0);
+    } while (err_msg != OK);
 }
 
 void fall_fig()

@@ -3,7 +3,7 @@
 #include <time.h>
 #include <conio.h>
 #include <windows.h>
-#include <string.h>
+#include <time.h>
 
 #define N_LINE 21
 #define N_COL 15
@@ -14,10 +14,6 @@
 #define KEY_LEFT 75
 #define KEY_SPACE 32
 #define KEY_DOWN 80
-#define ERR_MSG_L_WALL "L_WALL"
-#define ERR_MSG_R_WALL "R_WALL"
-#define ERR_MSG_OK "OK"
-#define LEN_STR 7
 
 typedef enum KEY {
     NONE,
@@ -25,9 +21,17 @@ typedef enum KEY {
     RIGHT,
     DOWN,
     SPACE
-} type_pressed_key;
+} pressed_key_t;
 
-type_pressed_key pressed_key = NONE;
+pressed_key_t pressed_key = NONE;
+
+typedef enum ERR_MSG {
+    L_WALL,
+    R_WALL,
+    OK
+} err_msg_t;
+
+err_msg_t err_msg;
 
 char Fig_sqr[SZ_FIG][SZ_FIG]= {{0,0,0,0},
                                {0,1,1,0},
@@ -87,4 +91,4 @@ void run_action();
 void print_console();
 void fall_fig();
 void check_line_complite();
-char *array_update();
+void array_update();
