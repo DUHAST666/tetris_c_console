@@ -89,6 +89,7 @@ void run_action()
     getch();
 }
  */
+
 void array_update()
 {
     char n_fig = 0;
@@ -273,7 +274,18 @@ void next_posRot_fig()
 
 void fall_fig()
 {
-
+    static clock_t t0;
+    clock_t dt = clock();
+   // printf("%d", dt - t0);
+    if (t0 != NULL){
+        if (dt - t0 >= 1500) {  // ms
+            posY++;
+            t0 = dt;
+            array_update();
+            print_console();
+        }
+    }
+    else t0 = dt;
 }
 
 void check_line_complite()
